@@ -1,3 +1,13 @@
+:root {
+  /* COLORS */
+  --primary-color: #102EB1;
+  --secondary-color: #E1EAEF;
+  --tetiary-color: ;
+  --link-color: #0447C6;
+  --gray-light: rgb(173, 173, 173);
+  --gray-dark: rgb(107, 107, 107);
+}
+
 * {
   box-sizing: border-box;
   margin: 0;
@@ -10,6 +20,10 @@ body {
     sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+}
+
+a {
+  text-decoration: none;
 }
 
 code {
