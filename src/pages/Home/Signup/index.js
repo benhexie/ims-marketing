@@ -3,7 +3,7 @@ import "./Signup.css"
 import { FaEnvelope, FaEye, FaEyeSlash, FaHome, FaLock, FaUser } from "react-icons/fa"
 import { useState } from "react";
 
-const Login = () => {
+const Signup = () => {
 
   const navigate = useNavigate();
   const [email, setEmail] = useState("");
@@ -19,10 +19,10 @@ const Login = () => {
 
   return (
     <div className="login-page signup-page">
+      <div className="to-home__container" onClick={() => navigate("/")}>
+        <FaHome />
+      </div>
       <div className="title__container">
-        <div className="to-home__container" onClick={() => navigate("/")}>
-          <FaHome />
-        </div>
         <h1>IMS MARKETING</h1>
         <p>Find everything in one click and contact the vendor immediately</p>
       </div>
@@ -34,13 +34,13 @@ const Login = () => {
               <div className="input__icon__container">
                 <FaUser />
               </div>
-              <input 
+              <input
                 autoFocus
                 required
                 type="text"
                 value={fullname}
                 onChange={(e) => setFullname(e.target.value)}
-                placeholder="Full name" 
+                placeholder="Full name"
               />
             </div>
             <div className="input__container">
@@ -48,7 +48,6 @@ const Login = () => {
                 <FaEnvelope />
               </div>
               <input 
-                autoFocus
                 required
                 type="email"
                 value={email}
@@ -67,7 +66,7 @@ const Login = () => {
                 { showPassword ? <FaEyeSlash /> : <FaEye /> }
               </div>
               <input
-                className="input__container" 
+                className="input__container password" 
                 required
                 value={password}
                 type={showPassword ? "text" : "password"}
@@ -80,7 +79,7 @@ const Login = () => {
                 <FaLock />
               </div>
               <input
-                className="input__container" 
+                className="input__container confirm__password" 
                 required
                 value={confirmPassword}
                 type={showPassword ? "text" : "password"}
@@ -97,4 +96,4 @@ const Login = () => {
   )
 }
 
-export default Login
+export default Signup

@@ -17,10 +17,10 @@ const Login = () => {
 
   return (
     <div className="login-page">
+      <div className="to-home__container" onClick={() => navigate("/")}>
+        <FaHome />
+      </div>
       <div className="title__container">
-        <div className="to-home__container" onClick={() => navigate("/")}>
-          <FaHome />
-        </div>
         <h1>IMS MARKETING</h1>
         <p>Find everything in one click and contact the vendor immediately</p>
       </div>
@@ -52,7 +52,7 @@ const Login = () => {
                 { showPassword ? <FaEyeSlash /> : <FaEye /> }
               </div>
               <input
-                className="input__container" 
+                className="input__container password" 
                 required
                 value={password}
                 type={showPassword ? "text" : "password"}
@@ -69,7 +69,7 @@ const Login = () => {
                 />
                 Remember me
               </label>
-              <Link to={"#"}>Forgot password</Link>
+              <Link to={"#"}>Forgot password?</Link>
             </div>
             <button type="submit">Login</button>
             <p>Don't have an account? <Link to={"/signup"}>Register</Link></p>

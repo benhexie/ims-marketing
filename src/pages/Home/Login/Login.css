@@ -19,6 +19,7 @@
     gap: 24px;
     color: white;
     position: relative;
+    padding: 16px;
 }
 
 .to-home__container {
@@ -27,6 +28,7 @@
     position: absolute;
     left: 24px;
     top: 24px;
+    z-index: 10;
     background-color: white;
     color: var(--primary-color);
     display: flex;
@@ -67,10 +69,17 @@
 .login__form :is(input:not([type="checkbox"]), button) {
     height: 40px;
     width: 100%;
-    padding-inline: 36px;
     border-radius: 5px;
     outline: none;
     border: none;
+}
+
+.login__form input:not([type="checkbox"]) {
+    padding-inline: 36px 8px;
+}
+
+.login__form input.password {
+    padding-right: 36px;
 }
 
 .login__form  input:not([type="checkbox"]) {
@@ -106,7 +115,10 @@
 .remember-me__container {
     width: 100%;
     display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
     justify-content: space-between;
+    align-items: center;
 }
 
 .remember-me__container label {
@@ -118,5 +130,43 @@
 @media (hover: hover) {
     .to-home__container:hover {
         cursor: pointer;
+    }
+    
+    .eye__icon__container:hover {
+        cursor: pointer;
+    }
+
+    .login__form button[type="submit"]:hover {
+        cursor: pointer;
+    }
+}
+
+@media (max-width: 680px) {
+    .login-page {
+        background: linear-gradient(
+            var(--primary-color) 35%,
+            var(--secondary-color) 35%,
+            var(--secondary-color)
+        );
+        flex-flow: column;
+        justify-content: center;
+    }
+
+    .login__title {
+        color: white;
+    }
+
+    .title__container {
+        display: none;
+    }
+}
+
+@media (max-width: 350px) {
+    .remember-me__container {
+        justify-content: center;
+    }
+
+    .remember-me__container label {
+        width: 100%;
     }
 }
