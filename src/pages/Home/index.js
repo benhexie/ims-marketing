@@ -1,10 +1,10 @@
 import { Outlet } from "react-router-dom"
 import "./Home.css"
 
-const Home = () => {
+const Home = (props) => {
   return (
     <div className="home-page">
-        <Outlet />
+        <Outlet context={{...props}} />
     </div>
   )
 }

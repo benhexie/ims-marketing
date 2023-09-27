@@ -1,7 +1,11 @@
-import { Link, useNavigate } from "react-router-dom"
+import { Link, useNavigate, useOutletContext } from "react-router-dom"
 import "./Login.css"
 import { FaEnvelope, FaEye, FaEyeSlash, FaHome, FaLock } from "react-icons/fa"
 import { useState } from "react";
+import { toast } from "react-toastify";
+import { useEffect } from "react";
+
+const SERVER = process.env.REACT_APP_SERVER;
 
 const Login = () => {
 
@@ -10,9 +14,36 @@ const Login = () => {
   const [password, setPassword] = useState("");
   const [remember, setRemember] = useState(true);
   const [showPassword, setShowPassword] = useState(false);
+  const context = useOutletContext();
 
-  const loginHandler = (e) => {
+  useEffect(() => {
+    if (context && context.loggedIn) {
+      setTimeout(() => {
+        navigate("/");
+      }, 2000)
+    }
+  }, [context])
+
+  const loginHandler = async (e) => {
     e.preventDefault();
+    try {
+      const response = await fetch(`${SERVER}/login`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Accept: "application/json"
+        },
+        body: JSON.stringify({ email, password })
+      })
+      const data = await response.json();
+      if (data.status === "success") {
+        localStorage.setItem("token", data.data.token);
+        context && context.setLoggedIn(true);
+        toast.success("Logged in");
+      }
+    } catch (err) {
+      
+    }
   }
 
   return (
@@ -71,7 +102,7 @@ const Login = () => {
               </label>
               <Link to={"#"}>Forgot password?</Link>
             </div>
-            <button type="submit">Login</button>
+            <button className="btn" type="submit">Login</button>
             <p>Don't have an account? <Link to={"/signup"}>Register</Link></p>
           </form>
         </div>

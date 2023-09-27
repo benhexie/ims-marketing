@@ -1,7 +1,8 @@
-import { Link, useNavigate } from "react-router-dom"
+import { Link, useNavigate, useOutletContext } from "react-router-dom"
 import "./Signup.css"
 import { FaEnvelope, FaEye, FaEyeSlash, FaHome, FaLock, FaUser } from "react-icons/fa"
 import { useState } from "react";
+import { toast } from "react-toastify";
 
 const Signup = () => {
 
@@ -9,12 +10,41 @@ const Signup = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
-  const [remember, setRemember] = useState(true);
   const [showPassword, setShowPassword] = useState(false);
   const [fullname, setFullname] = useState("");
+  const context = useOutletContext();
 
-  const signupHandler = (e) => {
+  const SERVER = process.env.REACT_APP_SERVER;
+
+  const signupHandler = async (e) => {
     e.preventDefault();
+
+    if (!fullname || !email || !password || !confirmPassword) return
+    if (password !== confirmPassword) {
+      return
+    }
+
+    try {
+      const response = await fetch(`${SERVER}/signup`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Accept: "application/json"
+        },
+        body: JSON.stringify({ name: fullname, email, password })
+      })
+      const data = await response.json();
+      if (data.status === "success") {
+        localStorage.setItem("token", data.data.token);
+        context && context.setLoggedIn(true);
+        toast.success("Logged in")
+        setTimeout(() => {
+          navigate("/");
+        }, 2000)
+      }
+    } catch (err) {
+      console.log(err.message);
+    }
   }
 
   return (
@@ -87,7 +117,7 @@ const Signup = () => {
                 placeholder="Confirm password" 
               />
             </div>
-            <button type="submit">Create Account</button>
+            <button className="btn" type="submit">Create Account</button>
             <p>Already have an account? <Link to={"/login"}>Login</Link></p>
           </form>
         </div>
