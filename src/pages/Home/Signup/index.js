@@ -1,6 +1,6 @@
 import { Link, useNavigate, useOutletContext } from "react-router-dom"
 import "./Signup.css"
-import { FaEnvelope, FaEye, FaEyeSlash, FaHome, FaLock, FaUser } from "react-icons/fa"
+import { FaEnvelope, FaEye, FaEyeSlash, FaHome, FaLock, FaPhone, FaUser } from "react-icons/fa"
 import { useState } from "react";
 import { toast } from "react-toastify";
 
@@ -12,6 +12,7 @@ const Signup = () => {
   const [confirmPassword, setConfirmPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const [fullname, setFullname] = useState("");
+  const [phone, setPhone] = useState("");
   const context = useOutletContext();
 
   const SERVER = process.env.REACT_APP_SERVER;
@@ -19,7 +20,7 @@ const Signup = () => {
   const signupHandler = async (e) => {
     e.preventDefault();
 
-    if (!fullname || !email || !password || !confirmPassword) return
+    if (!fullname || !email || !phone || !password || !confirmPassword) return
     if (password !== confirmPassword) {
       return
     }
@@ -31,7 +32,7 @@ const Signup = () => {
           "Content-Type": "application/json",
           Accept: "application/json"
         },
-        body: JSON.stringify({ name: fullname, email, password })
+        body: JSON.stringify({ name: fullname, email, phone, password })
       })
       const data = await response.json();
       if (data.status === "success") {
@@ -83,6 +84,18 @@ const Signup = () => {
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 placeholder="E-mail" 
+              />
+            </div>
+            <div className="input__container">
+              <div className="input__icon__container">
+                <FaPhone />
+              </div>
+              <input 
+                required
+                type="tel"
+                value={phone}
+                onChange={(e) => setPhone(e.target.value)}
+                placeholder="Phone" 
               />
             </div>
             <div className="input__container">
