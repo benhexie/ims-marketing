@@ -5,42 +5,6 @@
     height: 100vh;
 }
 
-.nav {
-    display: flex;
-    gap: 16px;
-    align-items: center;
-    height: 64px;
-    padding: 8px 24px;
-    background-color: var(--primary-color);
-    color: white;
-    box-shadow: 0px 0px 4px rgba(0, 0, 0, 0.25);
-    position: sticky;
-    top: 0;
-    left: 0;
-}
-
-.nav .title {
-    margin-right: auto;
-    font-weight: 500;
-}
-
-.nav__item {
-    height: 40px;
-    width: 148px;
-    border-radius: 5px;
-    border: 1px solid white;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    color: white;
-    text-decoration: none;
-}
-
-.nav__item.login {
-    background-color: white;
-    color: black;
-}
-
 .search__section {
     width: 100%;
     height: 240px;

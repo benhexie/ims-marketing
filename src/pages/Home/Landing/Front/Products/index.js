@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import "./Products.css"
-import ProductCard from "../../components/ProductCard"
+import ProductCard from "../../../../../components/ProductCard"
 import { useLocation, useOutletContext } from "react-router-dom";
 
 const Products = ({ products = [] }) => {

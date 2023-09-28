@@ -46,3 +46,18 @@ code {
   border: none;
   transition: all 100ms;
 }
+
+.custom__input {
+  height: 40px;
+  width: 100%;
+  border-radius: 5px;
+  outline: none;
+  border: 1px solid rgba(0, 0, 0, 0.25);
+  padding-inline: 8px;
+}
+
+@media (hover: hover) {
+  .btn:hover {
+    cursor: pointer;
+  }
+}

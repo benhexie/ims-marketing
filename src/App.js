@@ -12,6 +12,7 @@ import { useEffect } from 'react';
 import Dashboard from './pages/Dashboard';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css'
+import NewProduct from './pages/NewProduct';
 
 const SERVER = process.env.REACT_APP_SERVER;
 
@@ -23,12 +24,12 @@ function App() {
     const token = localStorage.getItem("token");
     if (token) {
       fetch(`${SERVER}/verify`, {
-        method: "POST",
+        method: "GET",
         headers: {
-          "Content-Type": "application/json",
+          "Content-Type": "text/html",
           Accept: "application/json",
-        },
-        body: JSON.stringify({ token })
+          Authorization: `Bearer ${token}`
+        }
       })
       .then(res => res.json())
       .then(data => {
@@ -64,10 +65,11 @@ function App() {
               <Route index element={<Front />} />
               <Route path='category/:category' element={<Front />} />
               <Route path='product/:id' element={<Product />} />
+              <Route path='dashboard' element={<Dashboard />} />
+              <Route path='new-product' element={<NewProduct />} />
             </Route>
             <Route path='login' element={<Login />} />
             <Route path='signup' element={<Signup />} />
-            <Route path='dashboard' element={<Dashboard />} />
           </Route>
           <Route path='*' element={<Error />} />
         </Routes>
