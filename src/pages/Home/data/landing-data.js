@@ -9,7 +9,7 @@ export const categoryData = {
     mobile: "Mobile phones and tablets",
     sprot: "Sports, arts & outdoors",
     book: "Books",
-    Property: "Property"
+    property: "Property"
 }
 
 export const productData = [

@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import "./Products.css"
 import ProductCard from "../../../../../components/ProductCard"
-import { useLocation, useOutletContext } from "react-router-dom";
+import { useLocation } from "react-router-dom";
 
 const Products = ({ products = [] }) => {
     const [category, setCategory] = useState("");
@@ -15,11 +15,7 @@ const Products = ({ products = [] }) => {
     }, [category, location]);
     
     useEffect(() => {
-    const newProducts = products
-        .filter((product) => {
-        return /^_{0,1}$/.test(category) || product.category === category
-        })
-        .map((product) => {
+    const newProducts = products.map((product) => {
         return <ProductCard 
             key={product._id} 
             name={product.name}
@@ -30,7 +26,7 @@ const Products = ({ products = [] }) => {
         />
         });
     setSpecificProducts(newProducts)
-    }, [category]);
+    }, [category, products]);
 
   return (
     <div className="scroll__container products__scroll">

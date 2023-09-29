@@ -2,26 +2,75 @@ import "./Front.css"
 import { FaAngleRight, FaSearch } from "react-icons/fa"
 import { useEffect, useState } from "react"
 import { categoryData } from "../../data/landing-data"
-import { productData } from "../../data/landing-data"
-import { Link, useLocation } from "react-router-dom"
+import { Link, useLocation, useNavigate } from "react-router-dom"
 import Products from "./Products"
+
+const SERVER = process.env.REACT_APP_SERVER;
 
 const Front = () => {
 
   const [search, setSearch] = useState("");
   const [category, setCategory] = useState("");
   const location = useLocation().pathname;
+  const [products, setProducts] = useState([]);
+  const navigate = useNavigate();
 
-  const searchFtn = (e) => {
-    e.preventDefault();
+  useEffect(() => {
+    if (/^\/search\//i.test(location))
+      setSearch(location.split("/").pop())
+  }, [])
 
-  }
+  useEffect(() => {
+    if (/^\/search\//i.test(location)) {
+      if (location.split("/").pop())
+        fetch(`${SERVER}${location}`, {
+          method: "GET"
+        }).then(res => res.json())
+        .then(data => {
+          if (data.status === "success")
+            setProducts(data.data)
+        }).catch(err => {
+          
+        });
+    }
+    else if (/^\/category\//i.test(location)) {
+      if (location.split("/").pop())
+        fetch(`${SERVER}${location}`, {
+          method: "GET"
+        }).then(res => res.json())
+        .then(data => {
+          console.log(data);
+          if (data.status === "success")
+            setProducts(data.data)
+        }).catch(err => {
+          
+        });
+    }
+    else {
+      fetch(`${SERVER}/products`, {
+        method: "GET"
+      }).then(res => res.json())
+      .then(data => {
+        if (data.status === "success")
+          setProducts(data.data)
+      }).catch((err) => {
+        console.error(err.message);
+      })
+    }
+  }, [location]);
 
   useEffect(() => {
     setCategory(() => {
       return location.split(/category|\//i).at(-1).toLowerCase();
     });
   }, [category, location]);
+  
+  const searchFtn = async (e) => {
+    e.preventDefault();
+    if (search)
+      navigate(`/search/${search}`)
+    else navigate("/")
+  }
 
   return (
     <>
@@ -46,7 +95,8 @@ const Front = () => {
               return (
                 <Link
                   key={c[0]} 
-                  to={`/category/${c[0]}`} 
+                  to={c[0] !== "_" ? `/category/${c[0]}` : "/"} 
+                  onClick={() => setSearch("")}
                   className={`category ${(() => {
                     if (!category && c[0] === "_") return "selected"
                     const selected = category === c[0] ? "selected" : "";
@@ -60,7 +110,7 @@ const Front = () => {
             })
           }
         </div>
-        <Products products={productData} />
+        <Products products={products} />
       </div>
     </>
   )

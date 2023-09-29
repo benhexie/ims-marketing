@@ -64,6 +64,7 @@ function App() {
             <Route path='/' element={<Landing />}>
               <Route index element={<Front />} />
               <Route path='category/:category' element={<Front />} />
+              <Route path='search/:product' element={<Front />} />
               <Route path='product/:id' element={<Product />} />
               <Route path='dashboard' element={<Dashboard />} />
               <Route path='new-product' element={<NewProduct />} />

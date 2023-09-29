@@ -2,6 +2,7 @@ import { FaCamera, FaCheckCircle } from "react-icons/fa"
 import { categoryData } from "../Home/data/landing-data"
 import "./NewProduct.css"
 import { useRef, useState } from "react"
+import { toast } from "react-toastify";
 
 const SERVER = process.env.REACT_APP_SERVER;
 
@@ -37,9 +38,13 @@ const NewProduct = () => {
         body: formData
       });
       const data = await response.json();
-      console.log(data);
+      if (data.status === "success") {
+        toast.success("Product created!");
+        return;
+      }
+      toast.error(data.message)
     } catch (err) {
-      console.error(err.message);
+      toast.warning("Check your internet connection.")
     }
   }
 
