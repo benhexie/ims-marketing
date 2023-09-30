@@ -1,12 +1,20 @@
 .product-page {
     display: flex;
-    gap: 16px;
+    flex-flow: column;
+    align-items: center;
     padding-inline: 24px;
     height: 100%;
     background-color: var(--secondary-color);
 }
 
 .product__container {
+    display: flex;
+    gap: 16px;
+    width: 100%;
+    max-width: 1200px;
+}
+
+.product-page .product__content {
     flex: 1;
     display: flex;
     flex-flow: column;
@@ -16,7 +24,7 @@
     gap: 16px;
 }
 
-.product__container .back__btn {
+.product__content .back__btn {
     margin-top: 24px;
     width: 40px;
     display: flex;
@@ -27,24 +35,34 @@
     border-radius: 100%;
 }
 
-.product__container .back__btn .icon {
+.product__content .back__btn .icon {
     transform: scale(1.2);
     transform-origin: center;
 }
 
-.product__container .image__container {
+.product__content .image__container {
     width: 100%;
     height: 400px;
     max-width: 600px;
-    background-color: green;
     overflow: hidden;
     border-radius: 8px;
 }
 
-.product__container .image__container img {
+.product__content .image__container img {
     width: 100%;
     height: 100%;
     object-fit: cover;
+    background-color: aqua;
+}
+
+.product__details__section {
+    display: flex;
+    flex-flow: column;
+    gap: 8px;
+}
+
+.product__details__section .title {
+    font-weight: 500;
 }
 
 .contact__container {
@@ -53,12 +71,51 @@
     max-width: 400px;
     align-self: center;
     height: 100%;
-    max-height: 400px;
+    max-height: 500px;
     border-radius: 8px;
+    padding: 16px;
+    display: flex;
+    flex-flow: column;
+    align-items: center;
+    gap: 16px;
+    padding-top: 24px;
+}
+
+.contact__image__section .image__container {
+    width: 120px;
+    height: 120px;
+    border-radius: 100%;
+    border: 2px solid var(--primary-color);
+    overflow: hidden;
+}
+
+.contact__image__section .image__container img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    background-color: aqua;
+}
+
+.contact__details__item {
+    display: flex;
+    flex-flow: column;
+    gap: 8px;
+}
+
+.contact__details__item > a {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+    justify-content: center;
+    color: var(--primary-color);
+}
+
+.contact__section__title {
+    font-weight: 500;
 }
 
 @media (hover: hover) {
-    .product__container .back__btn:hover {
+    .product__content .back__btn:hover {
         cursor: pointer;
         color: white;
         background-color: var(--primary-color);

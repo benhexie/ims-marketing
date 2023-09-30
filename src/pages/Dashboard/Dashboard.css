@@ -4,6 +4,8 @@
     gap: 16px;
     padding: 24px 24px 0 24px;
     position: relative;
+    background-color: var(--secondary-color);
+    height: 100%;
 }
 
 .create-new__btn {

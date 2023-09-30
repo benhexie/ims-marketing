@@ -1,8 +1,9 @@
 import { FaCamera, FaCheckCircle } from "react-icons/fa"
 import { categoryData } from "../Home/data/landing-data"
 import "./NewProduct.css"
-import { useRef, useState } from "react"
+import { useEffect, useRef, useState } from "react"
 import { toast } from "react-toastify";
+import { useNavigate } from "react-router-dom";
 
 const SERVER = process.env.REACT_APP_SERVER;
 
@@ -11,19 +12,39 @@ const NewProduct = () => {
   const [price, setPrice] = useState("");
   const [category, setCategory] = useState("cloth");
   const [desc, setDesc] = useState("");
-  const [imageState, setImageState] = useState("")
+  const [imageState, setImageState] = useState("");
+  const [locationState, setLocationState] = useState("");
   const imageRef = useRef(null);
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    fetch(`${SERVER}/verify`, {
+      method: "GET",
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem("token")}`
+      }
+    }).then(res => res.json())
+    .then(data => {
+      if (data.status !== "success")  {
+        localStorage.removeItem("token");
+        navigate("/login");
+      }
+    }).catch(err => {
+
+    })
+  }, [])
 
   const formHandler = async (e) => {
     e.preventDefault();
     const image = imageRef.current?.files[0];
     
-    if (!name || !price || !category || !desc || !image)
+    if (!name || !price || !locationState || !category || !desc || !image)
     return;
 
     const formData = new FormData();
     formData.append("name", name);
     formData.append("price", price);
+    formData.append("location", locationState);
     formData.append("category", category);
     formData.append("description", desc);
     formData.append("image", image);
@@ -66,6 +87,8 @@ const NewProduct = () => {
               }
               Product image
               <input 
+                autoFocus
+                required
                 ref={imageRef} 
                 value={imageState}
                 onChange={(e) => setImageState(e.target.value)}
@@ -77,7 +100,8 @@ const NewProduct = () => {
         <section className="details__section">
           <label>
             Product name
-            <input 
+            <input
+              required 
               className="custom__input" 
               placeholder="Glass mug"
               value={name}
@@ -86,6 +110,7 @@ const NewProduct = () => {
           <label>
             Product price (₦)
             <input 
+              required
               className="custom__input" 
               placeholder="14,000"
               type="number"
@@ -93,8 +118,18 @@ const NewProduct = () => {
               onChange={(e) => setPrice(e.target.value)} />
           </label>
           <label>
+            Product location
+            <input 
+              required
+              className="custom__input" 
+              placeholder="Abuja, Nigeria"
+              value={locationState}
+              onChange={(e) => setLocationState(e.target.value)} />
+          </label>
+          <label>
             Product category
             <select 
+              required
               className="custom__input"
               value={category}
               onChange={(e) => setCategory(e.target.value)}>
@@ -108,6 +143,7 @@ const NewProduct = () => {
           <label>
             Product description
             <textarea 
+              required
               className="custom__input product__desc" 
               placeholder="Fine white procelean glass mug with rare design..."
               value={desc}

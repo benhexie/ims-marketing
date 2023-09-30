@@ -1,17 +1,27 @@
-import { useLocation, useNavigate } from "react-router-dom"
+import { Link, useLocation, useNavigate } from "react-router-dom"
 import "./Product.css"
 import { useEffect, useState } from "react"
-import { FaAngleLeft } from "react-icons/fa"
+import { FaAngleLeft, FaEnvelope, FaLocationArrow, FaPhone } from "react-icons/fa"
+
+const SERVER = process.env.REACT_APP_SERVER;
 
 const Product = () => {
 
   const location = useLocation().pathname;
   const navigate = useNavigate();
-  const [productId, setProductId] = useState([]);
   const [product, setProduct] = useState({});
 
   useEffect(() => {
-    setProductId(location.split("/").pop())
+    fetch(`${SERVER}${location}`, {
+      method: "GET"
+    }).then(res => res.json())
+    .then(data => {
+      if (data.status === "success") {
+        setProduct(data.data);
+      }
+    }).catch(err => {
+      console.error(err.message);
+    })
   }, [location]);
 
   const goback = () => {
@@ -20,37 +30,48 @@ const Product = () => {
 
   return (
     <div className="product-page">
-        <div className="product__container">
+      <div className="product__container">
+        <div className="product__content">
           <button className="btn back__btn" onClick={goback}>
             <FaAngleLeft className="icon" />
           </button>
           <div className="image__container">
-            <img src="" />
+            <img src={product.image} />
           </div>
-          <section>
-            <h4>Polo Shirt</h4>
-            <p>₦ 9,000</p>
-            <p>Description</p>
-            <p>lorem ipsum</p>
+          <section className="product__details__section">
+            <p className="title">{product.name}</p>
+            <p>₦ {product.price?.toLocaleString("en-US")}</p>
+            <p className="title">Description</p>
+            <p>{product.description}</p>
           </section>
         </div>
         <div className="contact__container">
-          <section className="contact__image__section">
+          <section className="contact__details__item contact__image__section">
             <div className="image__container">
-              <img src="" />
+              <img src={product.user_image} />
             </div>
-            <p>Gregor Martins</p>
+            <p>{product.user_name}</p>
           </section>
-          <section className="contact__details__section">
-            <p>Contact details</p>
-            <p>09038043846</p>
-            <p>benedictgabriel73@gmail.com</p>
+          <section className="contact__details__item contact__details__section">
+            <p className="contact__section__title">Contact details</p>
+            <Link to={`tel:${product.phone}`}>
+              <FaPhone />
+              <p>{product.phone}</p>
+            </Link>
+            <Link to={`mailto:${product.email}`}>
+              <FaEnvelope />
+              <p>{product.email}</p>
+            </Link>
           </section>
-          <section className="contact__location__section">
-            <p>Location</p>
-            <p>Abuja, FCT</p>
+          <section className="contact__details__item contact__location__section">
+            <p className="contact__section__title">Location</p>
+            <Link>
+              <FaLocationArrow />
+              <p>{product.location}</p>
+            </Link>
           </section>
         </div>
+      </div>
     </div>
   )
 }
