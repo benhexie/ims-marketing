@@ -5,6 +5,7 @@ import { useEffect, useRef, useState } from "react"
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
 import Loading from "../../components/Loading";
+import { BeatLoader } from "react-spinners";
 
 const SERVER = process.env.REACT_APP_SERVER;
 
@@ -16,6 +17,7 @@ const NewProduct = () => {
   const [imageState, setImageState] = useState("");
   const [locationState, setLocationState] = useState("");
   const [loading, setLoading] = useState(false);
+  const [loadingProduct, setLoadingProduct] = useState(false);
   const [verified, setVerified] = useState(false);
   const imageRef = useRef(null);
   const navigate = useNavigate();
@@ -57,6 +59,7 @@ const NewProduct = () => {
     formData.append("image", image);
   
     try {
+      setLoadingProduct(true)
       const response = await fetch(`${SERVER}/product`, {
         method: "POST",
         headers: {
@@ -66,6 +69,7 @@ const NewProduct = () => {
         body: formData
       });
       const data = await response.json();
+      setLoadingProduct(false);
       if (data.status === "success") {
         toast.success("Product created!");
         return;
@@ -76,6 +80,7 @@ const NewProduct = () => {
         navigate("/login")
       }
     } catch (err) {
+      setLoadingProduct(false);
       toast.warning("Check your internet connection.")
     }
   }
@@ -83,7 +88,7 @@ const NewProduct = () => {
   return (
     <>
       {
-        !verified ? <Loading /> : (
+        loading || !verified ? <Loading /> : (
           <div className='new-product-page'>
             <form className="new-product__form" encType="multipart/form-data" onSubmit={formHandler}>
               <section className="image__section">
@@ -163,7 +168,10 @@ const NewProduct = () => {
                     value={desc}
                     onChange={(e) => setDesc(e.target.value)} />
                 </label>
-                <button className="btn product__btn" type="submit">Create new product</button>
+                {
+                  loadingProduct ? <BeatLoader color="var(--primary-color)" className="login__spinner" /> :
+                  <button className="btn product__btn" type="submit">Create new product</button>
+                }
               </section>
             </form>
           </div>
