@@ -10,17 +10,22 @@ const Product = () => {
   const location = useLocation().pathname;
   const navigate = useNavigate();
   const [product, setProduct] = useState({});
+  const [loading, setLoading] = useState(false)
 
   useEffect(() => {
+    setLoading(true);
     fetch(`${SERVER}${location}`, {
       method: "GET"
     }).then(res => res.json())
     .then(data => {
+      setLoading(false);
       if (data.status === "success") {
         setProduct(data.data);
+        return;
       }
     }).catch(err => {
       console.error(err.message);
+      setLoading(false);
     })
   }, [location]);
 

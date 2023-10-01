@@ -3,6 +3,7 @@ import "./Signup.css"
 import { FaEnvelope, FaEye, FaEyeSlash, FaHome, FaLock, FaPhone, FaUser } from "react-icons/fa"
 import { useState } from "react";
 import { toast } from "react-toastify";
+import { BeatLoader } from "react-spinners";
 
 const Signup = () => {
 
@@ -13,6 +14,7 @@ const Signup = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [fullname, setFullname] = useState("");
   const [phone, setPhone] = useState("");
+  const [loading, setLoading] = useState(false);
   const context = useOutletContext();
 
   const SERVER = process.env.REACT_APP_SERVER;
@@ -26,6 +28,7 @@ const Signup = () => {
     }
 
     try {
+      setLoading(true);
       const response = await fetch(`${SERVER}/signup`, {
         method: "POST",
         headers: {
@@ -35,6 +38,7 @@ const Signup = () => {
         body: JSON.stringify({ name: fullname, email, phone, password })
       })
       const data = await response.json();
+      setLoading(false);
       if (data.status === "success") {
         localStorage.setItem("token", data.data.token);
         context && context.setLoggedIn(true);
@@ -42,8 +46,12 @@ const Signup = () => {
         setTimeout(() => {
           navigate("/");
         }, 2000)
+        return;
       }
+      toast.error(data.message);
     } catch (err) {
+      setLoading(false);
+      toast.error(err.message);
       console.log(err.message);
     }
   }
@@ -130,7 +138,11 @@ const Signup = () => {
                 placeholder="Confirm password" 
               />
             </div>
-            <button className="btn" type="submit">Create Account</button>
+            {
+              loading ? 
+              <BeatLoader color="var(--primary-color)" className="login__spinner" /> :
+              <button className="btn" type="submit">Create Account</button>
+            }
             <p>Already have an account? <Link to={"/login"}>Login</Link></p>
           </form>
         </div>

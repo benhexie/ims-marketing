@@ -91,6 +91,10 @@
     color: white;
 }
 
+.login__spinner {
+    align-self: center;
+}
+
 .login__form .input__container {
     display: flex;
     align-items: center;

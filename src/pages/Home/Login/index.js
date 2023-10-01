@@ -4,6 +4,7 @@ import { FaEnvelope, FaEye, FaEyeSlash, FaHome, FaLock } from "react-icons/fa"
 import { useState } from "react";
 import { toast } from "react-toastify";
 import { useEffect } from "react";
+import { BeatLoader } from "react-spinners"
 
 const SERVER = process.env.REACT_APP_SERVER;
 
@@ -14,6 +15,7 @@ const Login = () => {
   const [password, setPassword] = useState("");
   const [remember, setRemember] = useState(true);
   const [showPassword, setShowPassword] = useState(false);
+  const [loading, setLoading] = useState(false);
   const context = useOutletContext();
 
   useEffect(() => {
@@ -26,7 +28,11 @@ const Login = () => {
 
   const loginHandler = async (e) => {
     e.preventDefault();
+
+    if (!email || !password) return
+
     try {
+      setLoading(true);
       const response = await fetch(`${SERVER}/login`, {
         method: "POST",
         headers: {
@@ -36,13 +42,17 @@ const Login = () => {
         body: JSON.stringify({ email, password })
       })
       const data = await response.json();
+      setLoading(false);
       if (data.status === "success") {
         localStorage.setItem("token", data.data.token);
         context && context.setLoggedIn(true);
         toast.success("Logged in");
+        return;
       }
+      toast.error("Login failed.");
     } catch (err) {
-      
+      setLoading(false);
+      toast.error(err.message);
     }
   }
 
@@ -96,13 +106,17 @@ const Login = () => {
                 <input 
                   checked={remember}
                   onChange={(e) => setRemember(prev => !prev)}
-                  type="checkbox" 
+                  type="checkbox"
                 />
                 Remember me
               </label>
               <Link to={"#"}>Forgot password?</Link>
             </div>
-            <button className="btn" type="submit">Login</button>
+            {
+              loading ? 
+              <BeatLoader color="var(--primary-color)" className="login__spinner" /> :
+              <button className="btn" type="submit">Login</button>
+            }
             <p>Don't have an account? <Link to={"/signup"}>Register</Link></p>
           </form>
         </div>
