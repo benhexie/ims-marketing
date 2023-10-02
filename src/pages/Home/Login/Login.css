@@ -1,8 +1,11 @@
 .login-page {
     display: flex;
+    justify-content: flex-start;
+    height: 100%;
+    min-height: 100vh;
     width: 100%;
-    height: 100vh;
     background-color: var(--secondary-color);
+    gap: 24px;
 }
 
 .login-page a {
@@ -35,6 +38,7 @@
     justify-content: center;
     align-items: center;
     border-radius: 100%;
+    padding-inline: 16px;
 }
 
 .login__container {
@@ -43,8 +47,8 @@
     flex-flow: column;
     justify-content: center;
     align-items: center;
-    padding: 24px;
     gap: 24px;
+    padding: 24px;
 }
 
 .login__title {
@@ -166,11 +170,41 @@
 }
 
 @media (max-width: 350px) {
+
+    .login-page {
+        padding: 24px;
+    }
+
+    .login__container {
+        overflow-y: auto;
+        padding: 0;
+    }
+
+    .to-home__container {
+        width: 100%;
+        position: relative;
+        top: unset;
+        left: unset;
+        border-radius: 8px;
+        gap: 8px;
+        min-height: 48px;
+    }
+
+    .to-home__container::after {
+        content: "Go to marketplace";
+    }
+
     .remember-me__container {
         justify-content: center;
     }
 
     .remember-me__container label {
         width: 100%;
+    }
+}
+
+@media (max-width: 250px) {
+    .to-home__container::after {
+        content: "";
     }
 }

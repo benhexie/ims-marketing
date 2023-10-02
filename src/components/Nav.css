@@ -20,7 +20,8 @@
 
 .nav__item {
     height: 40px;
-    width: 148px;
+    width: 100%;
+    max-width: 148px;
     border-radius: 5px;
     border: 1px solid white;
     display: flex;
@@ -33,4 +34,20 @@
 .nav__item.login {
     background-color: white;
     color: black;
+}
+
+@media (max-width: 500px) {
+    .nav {
+        height: fit-content;
+        flex-wrap: wrap;
+        justify-content: center;
+    }
+
+    .nav .title {
+        flex-basis: 100%
+    }
+
+    .nav__item {
+        max-width: unset;
+    }
 }

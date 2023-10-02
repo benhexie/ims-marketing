@@ -59,6 +59,7 @@
     flex-flow: column;
     gap: 16px;
     width: 100%;
+    overflow-y: auto;
 }
 
 .manage__products__container {
@@ -69,4 +70,23 @@
     max-width: 1200px;
     align-self: center;
     justify-content: center;
+    padding-bottom: 64px;
+}
+
+@media (max-width: 500px) {
+    .create-new__btn {
+        position: relative;
+        max-width: unset;
+    }
+
+    .dashboard__image__section .image__container {
+        width: 80px;
+        height: 80px;
+        min-width: 80px;
+        min-height: 80px;
+    }
+    
+    .dashboard__image__section {
+        margin-top: 0;
+    }
 }

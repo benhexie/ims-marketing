@@ -11,6 +11,7 @@ const Front = () => {
 
   const [search, setSearch] = useState("");
   const [category, setCategory] = useState("");
+  const [categorySelected, setCategorySelected] = useState("_");
   const location = useLocation().pathname;
   const [products, setProducts] = useState([]);
   const navigate = useNavigate();
@@ -19,6 +20,16 @@ const Front = () => {
     if (/^\/search\//i.test(location))
       setSearch(location.split("/").pop())
   }, [])
+
+  useEffect(() => {
+    switch (categorySelected) {
+      case "_":
+        navigate("/");
+        break;
+      default:
+        navigate(`/category/${categorySelected}`)
+    }
+  }, [categorySelected])
 
   useEffect(() => {
     if (/^\/search\//i.test(location)) {
@@ -39,7 +50,6 @@ const Front = () => {
           method: "GET"
         }).then(res => res.json())
         .then(data => {
-          console.log(data);
           if (data.status === "success")
             setProducts(data.data)
         }).catch(err => {
@@ -109,7 +119,21 @@ const Front = () => {
               )
             })
           }
-        </div>
+          </div>
+          <select
+            className={`custom__input category__select`}
+            value={categorySelected}
+            onChange={(e) => setCategorySelected(e.target.value)}
+          >
+            {
+              Object.entries(categoryData).map((c) => (
+                <option 
+                  key={c[0]} 
+                  value={c[0]}
+                >{c[1]}</option>
+              ))
+            }
+          </select>
         <Products products={products} />
       </div>
     </>
