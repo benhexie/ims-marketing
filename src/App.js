@@ -13,16 +13,19 @@ import Dashboard from './pages/Dashboard';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css'
 import NewProduct from './pages/NewProduct';
+import Loading from './components/Loading';
 
 const SERVER = process.env.REACT_APP_SERVER;
 
 function App() {
 
   const [loggedIn, setLoggedIn] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     const token = localStorage.getItem("token");
     if (token) {
+      setLoading(true);
       fetch(`${SERVER}/verify`, {
         method: "GET",
         headers: {
@@ -33,49 +36,56 @@ function App() {
       })
       .then(res => res.json())
       .then(data => {
+        setLoading(false)
         if (data.status === "success") setLoggedIn(true);
         else {
           localStorage.removeItem("token");
           setLoggedIn(false);
         };
       }).catch(err => {
+        setLoading(false);
         console.log(err.message);
       })
     }
   }, [loggedIn])
 
   return (
-    <div className="App">
-      <ToastContainer
-        position="top-center"
-        autoClose={2000}
-        hideProgressBar={false}
-        newestOnTop={false}
-        closeOnClick
-        rtl={false}
-        pauseOnFocusLoss
-        draggable
-        pauseOnHover
-        theme="light"
-      />
-      <Router>
-        <Routes>
-          <Route path='/' element={<Home loggedIn={loggedIn} setLoggedIn={setLoggedIn} />}>
-            <Route path='/' element={<Landing />}>
-              <Route index element={<Front />} />
-              <Route path='category/:category' element={<Front />} />
-              <Route path='search/:product' element={<Front />} />
-              <Route path='product/:id' element={<Product />} />
-              <Route path='dashboard' element={<Dashboard />} />
-              <Route path='new-product' element={<NewProduct />} />
-            </Route>
-            <Route path='login' element={<Login />} />
-            <Route path='signup' element={<Signup />} />
-          </Route>
-          <Route path='*' element={<Error />} />
-        </Routes>
-      </Router>
-    </div>
+    <>
+      {
+        loading ? <Loading toplevel /> :
+        <div className="App">
+          <ToastContainer
+            position="top-center"
+            autoClose={2000}
+            hideProgressBar={false}
+            newestOnTop={false}
+            closeOnClick
+            rtl={false}
+            pauseOnFocusLoss
+            draggable
+            pauseOnHover
+            theme="light"
+          />
+          <Router>
+            <Routes>
+              <Route path='/' element={<Home loggedIn={loggedIn} setLoggedIn={setLoggedIn} />}>
+                <Route path='/' element={<Landing />}>
+                  <Route index element={<Front />} />
+                  <Route path='category/:category' element={<Front />} />
+                  <Route path='search/:product' element={<Front />} />
+                  <Route path='product/:id' element={<Product />} />
+                  <Route path='dashboard' element={<Dashboard />} />
+                  <Route path='new-product' element={<NewProduct />} />
+                </Route>
+                <Route path='login' element={<Login />} />
+                <Route path='signup' element={<Signup />} />
+              </Route>
+              <Route path='*' element={<Error />} />
+            </Routes>
+          </Router>
+        </div>
+      }
+    </>
   );
 }
 

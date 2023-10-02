@@ -1,10 +1,13 @@
 import "./Loading.css"
 import { ScaleLoader } from "react-spinners"
 
-const Loading = () => {
+const Loading = ({ toplevel=false }) => {
   return (
-    <div className="loading-page">
-        <ScaleLoader color="var(--primary-color)" />
+    <div 
+      className="loading-page" 
+      style={ toplevel ? { minHeight: "100vh" } : {} }>
+        <ScaleLoader 
+          color="var(--primary-color)" />
     </div>
   )
 }
