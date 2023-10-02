@@ -39,7 +39,7 @@ const Dashboard = () => {
   return (
     <>
       {
-        !Object.keys(user).length || loading ? (
+        !Object.keys(user || {}).length || loading ? (
           <Loading />
         ) : (
           <div className="dashboard-page">
