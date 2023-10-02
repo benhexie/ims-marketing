@@ -22,27 +22,6 @@ const NewProduct = () => {
   const imageRef = useRef(null);
   const navigate = useNavigate();
 
-  useEffect(() => {
-    setLoading(true);
-    fetch(`${SERVER}/verify`, {
-      method: "GET",
-      headers: {
-        Authorization: `Bearer ${localStorage.getItem("token")}`
-      }
-    }).then(res => res.json())
-    .then(data => {
-      setLoading(false)
-      if (data.status !== "success")  {
-        localStorage.removeItem("token");
-        navigate("/login");
-        return;
-      }
-      setVerified(true);
-    }).catch(err => {
-      setLoading(false)
-    })
-  }, [])
-
   const formHandler = async (e) => {
     e.preventDefault();
     const image = imageRef.current?.files[0];
@@ -86,98 +65,92 @@ const NewProduct = () => {
   }
 
   return (
-    <>
-      {
-        loading || !verified ? <Loading /> : (
-          <div className='new-product-page'>
-            <form className="new-product__form" encType="multipart/form-data" onSubmit={formHandler}>
-              <section className="image__section">
-                  <label>
-                    {
-                      !imageState ? (
-                        <>
-                          <div>
-                            <FaCamera className="product__image__icon" />
-                          </div>
-                        </>
-                      ) : (
-                        <FaCheckCircle className="product__image__icon green" />
-                        )
-                    }
-                    Product image
-                    <input 
-                      autoFocus
-                      required
-                      ref={imageRef} 
-                      value={imageState}
-                      onChange={(e) => setImageState(e.target.value)}
-                      hidden 
-                      type="file" 
-                      accept=".jpg, .jpeg, .png" />
-                  </label>
-              </section>
-              <section className="details__section">
-                <label>
-                  Product name
-                  <input
-                    required 
-                    className="custom__input" 
-                    placeholder="Glass mug"
-                    value={name}
-                    onChange={(e) => setName(e.target.value)} />
-                </label>
-                <label>
-                  Product price (₦)
-                  <input 
-                    required
-                    className="custom__input" 
-                    placeholder="14,000"
-                    type="number"
-                    value={price}
-                    onChange={(e) => setPrice(e.target.value)} />
-                </label>
-                <label>
-                  Product location
-                  <input 
-                    required
-                    className="custom__input" 
-                    placeholder="Abuja, Nigeria"
-                    value={locationState}
-                    onChange={(e) => setLocationState(e.target.value)} />
-                </label>
-                <label>
-                  Product category
-                  <select 
-                    required
-                    className="custom__input"
-                    value={category}
-                    onChange={(e) => setCategory(e.target.value)}>
-                    {
-                      Object.entries(categoryData)
-                      .filter((c) => !/_/.test(c[0]))
-                      .map((c, i) => <option key={i} value={c[0]}>{c[1]}</option>)
-                    }
-                  </select>
-                </label>
-                <label>
-                  Product description
-                  <textarea 
-                    required
-                    className="custom__input product__desc" 
-                    placeholder="Fine white procelean glass mug with rare design..."
-                    value={desc}
-                    onChange={(e) => setDesc(e.target.value)} />
-                </label>
-                {
-                  loadingProduct ? <BeatLoader color="var(--primary-color)" className="login__spinner" /> :
-                  <button className="btn product__btn" type="submit">Create new product</button>
-                }
-              </section>
-            </form>
-          </div>
-        )
-      }
-    </>
+    <div className='new-product-page'>
+      <form className="new-product__form" encType="multipart/form-data" onSubmit={formHandler}>
+        <section className="image__section">
+            <label>
+              {
+                !imageState ? (
+                  <>
+                    <div>
+                      <FaCamera className="product__image__icon" />
+                    </div>
+                  </>
+                ) : (
+                  <FaCheckCircle className="product__image__icon green" />
+                  )
+              }
+              Product image
+              <input 
+                autoFocus
+                required
+                ref={imageRef} 
+                value={imageState}
+                onChange={(e) => setImageState(e.target.value)}
+                hidden 
+                type="file" 
+                accept=".jpg, .jpeg, .png" />
+            </label>
+        </section>
+        <section className="details__section">
+          <label>
+            Product name
+            <input
+              required 
+              className="custom__input" 
+              placeholder="Glass mug"
+              value={name}
+              onChange={(e) => setName(e.target.value)} />
+          </label>
+          <label>
+            Product price (₦)
+            <input 
+              required
+              className="custom__input" 
+              placeholder="14,000"
+              type="number"
+              value={price}
+              onChange={(e) => setPrice(e.target.value)} />
+          </label>
+          <label>
+            Product location
+            <input 
+              required
+              className="custom__input" 
+              placeholder="Abuja, Nigeria"
+              value={locationState}
+              onChange={(e) => setLocationState(e.target.value)} />
+          </label>
+          <label>
+            Product category
+            <select 
+              required
+              className="custom__input"
+              value={category}
+              onChange={(e) => setCategory(e.target.value)}>
+              {
+                Object.entries(categoryData)
+                .filter((c) => !/_/.test(c[0]))
+                .map((c, i) => <option key={i} value={c[0]}>{c[1]}</option>)
+              }
+            </select>
+          </label>
+          <label>
+            Product description
+            <textarea 
+              required
+              className="custom__input product__desc" 
+              placeholder="Fine white procelean glass mug with rare design..."
+              value={desc}
+              onChange={(e) => setDesc(e.target.value)} />
+          </label>
+          {
+            loadingProduct ? <BeatLoader color="var(--primary-color)" className="login__spinner" /> :
+            <button className="btn product__btn" type="submit">Create new product</button>
+          }
+        </section>
+      </form>
+    </div>
   )
 }
 
