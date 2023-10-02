@@ -69,6 +69,8 @@ const Dashboard = () => {
               <p>Manage products</p>
               <div className="manage__products__container">
                 {
+                  !products.length ? 
+                  <p className="npf__text">No product found.</p> :
                   products.map((product) => (
                     <ProductCard 
                       key={product._id} 
