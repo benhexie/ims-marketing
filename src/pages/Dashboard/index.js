@@ -1,9 +1,10 @@
 import { useNavigate } from "react-router-dom"
 import "./Dashboard.css"
-import { useEffect, useState } from "react"
+import { useEffect, useRef, useState } from "react"
 import ProductCard from "../../components/ProductCard";
 import SvgProfile from "../../assets/Profile";
 import Loading from "../../components/Loading";
+import { toast } from "react-toastify";
 
 const SERVER = process.env.REACT_APP_SERVER;
 
@@ -13,6 +14,7 @@ const Dashboard = () => {
   const [user, setUser] = useState({});
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
+  const imageRef = useRef(null);
 
   useEffect(() => {
     setLoading(true);
@@ -34,7 +36,31 @@ const Dashboard = () => {
     }).catch(err => {
       setLoading(false);
     })
-  }, [])
+  }, []);
+
+  const setProfilePic = async () => {
+    if (!imageRef.current) return;
+    const formData = new FormData();
+    formData.append("image", imageRef.current.files[0]);
+    try {
+      const response = await fetch(`${SERVER}/upload-pic`, {
+        method: "POST",
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("token")}`
+        },
+        body: formData
+      })
+      const data = await response.json();
+      if (data.status === "error") return toast.error(data.message);
+      setUser(prev => ({
+        ...prev,
+        image: data.data.image
+      }))
+      toast.success(data.message);
+    } catch (err) {
+      
+    }
+  }
 
   return (
     <>
@@ -49,7 +75,14 @@ const Dashboard = () => {
                 Create new product
             </button>
             <section className="dashboard__image__section">
-              <div className="image__container">
+              <label className="image__container">
+                <input 
+                  ref={imageRef}
+                  onChange={setProfilePic}
+                  type="file" 
+                  accept=".jpg, .jpeg, .png" 
+                  hidden 
+                />
                 {
                   user.image &&
                   <div className="round__white" />
@@ -61,7 +94,7 @@ const Dashboard = () => {
                     <SvgProfile />
                   )
                 }
-              </div>
+              </label>
               <h4>{user.name}</h4>
               <p>{user.email}</p>
             </section>

@@ -6,6 +6,7 @@
     position: relative;
     background-color: var(--secondary-color);
     height: 100%;
+    padding-top: 40px;
 }
 
 .create-new__btn {
@@ -23,7 +24,6 @@
     justify-content: center;
     align-items: center;
     gap: 8px;
-    margin-top: 40px;
 }
 
 .dashboard__image__section .image__container {
@@ -71,6 +71,12 @@
     align-self: center;
     justify-content: center;
     padding-bottom: 64px;
+}
+
+@media (hover: hover) {
+    .dashboard__image__section .image__container:hover {
+        cursor: pointer;
+    }
 }
 
 @media (max-width: 500px) {
